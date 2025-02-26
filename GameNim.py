@@ -61,7 +61,7 @@ class Game:
             self.total_rocks -= remove_rocks
             current_round += 1
             current_player = current_round % 2
-            if self.total_rocks == 0:
+            if self.total_rocks <= self.min_rocks:
                 self.winner( players[current_player] )
     
     def player_vs_cpu(self):
