@@ -1,77 +1,71 @@
-import random  # Importa a biblioteca para gerar números aleatórios
+import random
 
-# Classe base para os jogadores
-class Jogador:
+class Player:
     def __init__(self, nome):
-        self.nome = nome  # Nome do jogador
-        self.pontos = 0  # Inicializa a pontuação
+        self.nome = nome
+        self.pontos = 0
 
     def jogar(self):
-        """Simula uma jogada do jogador, sorteando um número entre 1 e 6."""
-        valor = random.randint(1, 6)  # Sorteia um número entre 1 e 6
-        self.pontos += valor  # Soma o valor sorteado ao total de pontos do jogador
-        print(f"{self.nome} tirou {valor}. Total: {self.pontos}")  # Exibe o resultado da jogada
+        """Simula uma jogada, podendo cair um número de 1 à 6."""
+        ponto = random.randint(1, 6)
+        self.pontos += ponto
+        print(f"{self.nome} tirou {ponto}. Total: {self.pontos}\n")
 
-# Classe CPU herda da classe Jogador
-class CPU(Jogador):
+class CPU(Player):
     def __init__(self):
-        super().__init__("CPU")  # Define o nome como "CPU"
+        super().__init__("CPU")
 
-# Classe que gerencia o jogo
-class Jogo:
+class Game:
     def __init__(self):
-        """Inicializa o jogo, pedindo o nome do primeiro jogador."""
-        self.jogador1 = Jogador(input("Digite seu nome: "))  # Cria o primeiro jogador com o nome digitado
+        self.player1 = Player(input("Write your nick: "))
 
-    def determinar_vencedor(self, jogador1, jogador2):
-        """Compara a pontuação dos jogadores e determina o vencedor."""
-        if jogador1.pontos > jogador2.pontos:
-            print(f"\n{jogador1.nome} venceu com {jogador1.pontos} pontos!")  # Jogador 1 venceu
-        elif jogador2.pontos > jogador1.pontos:
-            print(f"\n{jogador2.nome} venceu com {jogador2.pontos} pontos!")  # Jogador 2 venceu
+    def winner(self, player1, player2):
+        if player1.pontos > player2.pontos:
+            print(f"\n{player1.nome} win with {player1.pontos} points!\n")
+        elif player2.pontos > player1.pontos:
+            print(f"\n{player2.nome} win with {player2.pontos} points!\n")
         else:
-            print("\nEmpate!")  # Caso ambos tenham a mesma pontuação
+            print("\nDraw!\n")
+    
+    def play_game(self, player1, player2):
 
-    def jogar_partida(self, jogador1, jogador2):
-        """Executa a partida entre dois jogadores, alternando as jogadas."""
-        print(f"\n{jogador1.nome} vs {jogador2.nome}\n")  # Exibe os jogadores que vão competir
+        # Resetando as pontuações no começo de cada partida
+        player1.pontos = 0
+        player2.pontos = 0
 
-        for rodada in range(1, 4):  # São 3 rodadas
-            print(f"\nRodada {rodada}:")  
-            jogador1.jogar()  # Jogador 1 joga
-            jogador2.jogar()  # Jogador 2 joga
+        print(f"\n{player1.nome} VS {player2.nome}\n")
 
-        self.determinar_vencedor(jogador1, jogador2)  # Verifica quem ganhou após as rodadas
+        for play in range(1, 4):
+            print(f"\nRound {play}\n")
+            player1.jogar()
+            player2.jogar()
+        self.winner(player1, player2)
+    
+    def player_vs_cpu(self):
+        cpu = CPU()
+        self.play_game(self.player1, cpu)
+    
+    def player_vs_player(self):
+        player2 = Player(input("Enter the nick of the 2nd player: "))
+        self.play_game(self.player1, player2)
 
-    def jogar_contra_cpu(self):
-        """Inicia uma partida entre o jogador e a CPU."""
-        cpu = CPU()  # Cria a CPU
-        self.jogar_partida(self.jogador1, cpu)  # Chama a função para jogar
-
-    def jogar_contra_jogador(self):
-        """Inicia uma partida entre dois jogadores humanos."""
-        jogador2 = Jogador(input("Digite o nome do segundo jogador: "))  # Pede o nome do segundo jogador
-        self.jogar_partida(self.jogador1, jogador2)  # Chama a função para jogar
-
-    def mostrar_menu(self):
-        """Exibe o menu do jogo e gerencia as escolhas do jogador."""
+    def view_menu(self):
         while True:
             print("\nMenu:")
-            print("1 - Jogar contra a CPU")
-            print("2 - Jogar contra outro jogador")
-            print("3 - Sair")
-            escolha = input("Escolha uma opção: ")  # Usuário escolhe a opção
+            print("1 - Player VS CPU")
+            print("2 - Player VS Player")
+            print("3 - Exit")
+            escolha = input("Choose one option: ")
 
             if escolha == "1":
-                self.jogar_contra_cpu()  # Inicia jogo contra CPU
+                self.player_vs_cpu()
             elif escolha == "2":
-                self.jogar_contra_jogador()  # Inicia jogo contra outro jogador
+                self.player_vs_player()
             elif escolha == "3":
-                print("Saindo do jogo...")  # Mensagem de saída
-                break  # Sai do loop e encerra o jogo
+                print("\nExiting game...\n")
+                break
             else:
-                print("Opção inválida. Tente novamente.")  # Mensagem de erro caso a opção seja inválida
+                print("\nInvalid option. Try again.\n")
 
-# Executa o jogo
-jogo = Jogo()  # Cria uma instância do jogo
-jogo.mostrar_menu()  # Inicia o menu do jogo
+game = Game()
+game.view_menu()
