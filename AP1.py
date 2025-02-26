@@ -1,15 +1,16 @@
 import random
+from time import sleep
 
 class Player:
-    def __init__(self, nome):
-        self.nome = nome
-        self.pontos = 0
+    def __init__(self, name):
+        self.name = name
+        self.points = 0
 
-    def jogar(self):
+    def play(self):
         """Simula uma jogada, podendo cair um número de 1 à 6."""
-        ponto = random.randint(1, 6)
-        self.pontos += ponto
-        print(f"{self.nome} tirou {ponto}. Total: {self.pontos}\n")
+        point = random.randint(1, 6)
+        self.points += point
+        print(f"{self.name} tirou {point}. Total: {self.points}\n")
 
 class CPU(Player):
     def __init__(self):
@@ -20,25 +21,26 @@ class Game:
         self.player1 = Player(input("Write your nick: "))
 
     def winner(self, player1, player2):
-        if player1.pontos > player2.pontos:
-            print(f"\n{player1.nome} win with {player1.pontos} points!\n")
-        elif player2.pontos > player1.pontos:
-            print(f"\n{player2.nome} win with {player2.pontos} points!\n")
+        if player1.points > player2.points:
+            print(f"\n{player1.name} win with {player1.points} points!\n")
+        elif player2.points > player1.points:
+            print(f"\n{player2.name} win with {player2.points} points!\n")
         else:
             print("\nDraw!\n")
     
     def play_game(self, player1, player2):
 
         # Resetando as pontuações no começo de cada partida
-        player1.pontos = 0
-        player2.pontos = 0
+        player1.points = 0
+        player2.points = 0
 
-        print(f"\n{player1.nome} VS {player2.nome}\n")
+        print(f"\n{player1.name} VS {player2.name}\n")
 
         for play in range(1, 4):
             print(f"\nRound {play}\n")
-            player1.jogar()
-            player2.jogar()
+            player1.play()
+            player2.play()
+            sleep(2)
         self.winner(player1, player2)
     
     def player_vs_cpu(self):
